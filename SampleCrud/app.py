@@ -153,18 +153,11 @@ def view_reservations():
     else:
         return redirect(url_for('login'))
 
-
-from flask import render_template, request, session, redirect, url_for
-from mysql.connector import Error
-from datetime import datetime
-
-
 from flask import render_template, redirect, url_for, session, flash
 from flask import render_template, request, session, redirect, url_for
 from mysql.connector import Error
 from datetime import datetime
 
-from flask import render_template, redirect, url_for, session, flash
 
 @app.route('/make_reservation', methods=['GET', 'POST'])
 def make_reservation():
@@ -275,7 +268,6 @@ def logout():
 
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 
-# Your other imports...
 
 @app.route('/person')
 def person():
@@ -345,9 +337,6 @@ def confirm_update():
 
     return redirect(url_for('home'))
 
-# ... (other routes and configurations)
-
-
 @app.route('/home')
 def home():
     try:
@@ -403,9 +392,6 @@ def manage_users():
     else:
         return redirect(url_for('login'))
 
-
-
-
 from flask import jsonify
 
 @app.route('/admin/add_room', methods=['GET', 'POST'])
@@ -456,9 +442,6 @@ def add_room():
     # Redirect to the login page if not logged in as an admin
     return redirect(url_for('login'))
 
-
-
-
 @app.route('/admin/edit_room/<int:room_id>', methods=['GET', 'POST'])
 def edit_room(room_id):
     if 'loggedin' in session and session['role'] == 'admin':
@@ -490,8 +473,6 @@ def edit_room(room_id):
 
     # Redirect to the login page if not logged in as an admin
     return redirect(url_for('login'))
-
-
 
 
 @app.route('/admin/delete_room/<int:room_id>')
