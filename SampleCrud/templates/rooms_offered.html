@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rooms Offered</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+            color: #333;
+            
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 32px;
+            margin-bottom: 20px;
+            color: #007bff;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        li {
+            border: 1px solid #ddd;
+            background-color: #fff;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            padding: 20px;
+            background: rgba( 160, 200, 250, 0.25 );
+            box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+            backdrop-filter: blur( 14.5px );
+            -webkit-backdrop-filter: blur( 14.5px );
+            border-radius: 10px;
+            border: 1px solid rgba( 255, 255, 255, 0.18 );      
+        }
+
+        h3 {
+            margin-top: 0;
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            color: #555;
+            margin: 8px 0;
+        }
+
+        a {
+            text-decoration: none;
+            color: #007bff;
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        a:hover {
+            color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Rooms Offered</h1>
+
+        <ul>
+            {% for room in rooms %}
+                <li>
+                    <h3>Room Number: {{ room[0] }}</h3>
+                    <p>Room Type: {{ room[1] }}</p>
+                    <p>Price: ${{ room[2] }}</p>
+                    <!-- Add more room details as needed -->
+                    <a href="{{ url_for('make_reservation') }}?room_number={{ room[0] }}">Reserve this Room</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>

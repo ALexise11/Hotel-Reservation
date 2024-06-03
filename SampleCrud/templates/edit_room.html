@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grand Residency Hotel</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        form {
+            max-width: 600px;
+            margin: 20px auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #4caf50;
+            color: white;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        a {
+            color: #3498db;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>Edit Room</h1>
+    <div>
+        <a href="{{ url_for('manage_rooms') }}">Back to Manage Rooms</a>
+    </div>
+
+    <form method="POST" action="{{ url_for('edit_room', room_id=room.id) }}">
+        <table>
+            <tr>
+                <th>Field</th>
+                <th>Value</th>
+            </tr>
+            <tr>
+                <td>Room Number:</td>
+                <td><input type="text" id="room_number" name="room_number" value="{{ room.room_number }}" required></td>
+            </tr>
+            <tr>
+                <td>Room Name:</td>
+                <td><input type="text" id="room_name" name="room_name" value="{{ room.room_name }}" required></td>
+            </tr>
+            <tr>
+                <td>Room Type:</td>
+                <td>
+                    <select id="room_type" name="room_type" required>
+                        <option value="Single" {% if room.room_type == 'Single' %}selected{% endif %}>Single</option>
+                        <option value="Double" {% if room.room_type == 'Double' %}selected{% endif %}>Double</option>
+                        <option value="Suite" {% if room.room_type == 'Suite' %}selected{% endif %}>Suite</option>
+                        <!-- Add more room types as needed -->
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Price:</td>
+                <td><input type="text" id="price" name="price" value="{{ room.price }}" required></td>
+            </tr>
+            <tr>
+                <td>Availability:</td>
+                <td>
+                    <select id="is_available" name="is_available" required>
+                        <option value="1" {% if room.is_available %}selected{% endif %}>Available</option>
+                        <option value="0" {% if not room.is_available %}selected{% endif %}>Not Available</option>
+                    </select>
+                </td>
+            </tr>
+        </table>
+
+        <button type="submit">Save Changes</button>
+    </form>
+</body>
+</html>

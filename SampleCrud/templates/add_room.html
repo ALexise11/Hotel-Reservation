@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grand Residency Hotel</title>
+    <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+    crossorigin="anonymous"
+  />
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        form {
+            max-width: 600px;
+            margin: 20px auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #34db7f;
+            color: white;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #3498db;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        a {
+            color: #3498db;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+            /* margin-top: 20px;
+            margin-bottom: 20px; */
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <nav
+      class="navbar navbar-expand-lg navbar-light bg-light fixed-top ms-auto px-4"
+    >
+      <a class="navbar-brand" href="#">Admin Dashboard</a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarNav"
+        aria-controls="navbarNav"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('manage_rooms') }}"
+              >Manage Rooms</a
+            >
+          </li>
+          <li
+            class="nav-item {{ 'active' if active_link == 'manage_reservation' else '' }}"
+          >
+            <a class="nav-link" href="{{ url_for('manage_reservation') }}"
+              >Manage Reservation</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('add_room') }}"
+              >Add New Room</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <h1>Add Room</h1>
+    <!-- <div>
+        <a href="{{ url_for('manage_rooms') }}">Back to Manage Rooms</a>
+    </div> -->
+
+    <form method="POST" action="{{ url_for('add_room') }}"  enctype="multipart/form-data" id="add_room">
+      <table>
+          <tr>
+              <th>Field</th>
+              <th>Value</th>
+          </tr>
+          <tr>
+              <td>Room Number:</td> 
+              <td><input type="text" id="room_number" name="room_number" required></td>
+          </tr>
+          <tr>
+              <td>Room Name:</td>
+              <td><input type="text" id="room_name" name="room_name" required></td>
+          </tr>
+          <tr>
+              <td>Room Type:</td>
+              <td>
+                  <select id="room_type" name="room_type" required>
+                      <option value="Single">Single</option>
+                      <option value="Double">Double</option>
+                      <option value="Suite">Suite</option>
+                      <!-- Add more room types as needed -->
+                  </select>
+              </td>
+          </tr>
+          <tr>
+              <td>Price:</td>
+              <td><input type="text" id="price" name="price" required></td>
+          </tr>
+          <tr>
+              <td>Availability:</td>
+              <td>
+                  <select id="is_available" name="is_available" required>
+                      <option value="1">Available</option>
+                      <option value="0">Not Available</option>
+                  </select>
+              </td>
+          </tr>
+          <tr>
+            <td>Maximum Persons:</td>
+            <td><input type="number" id="max_persons" name="max_persons" required min="1"></td>
+          </tr>
+          <tr>
+            <td>Room Image:</td>
+            <td><input type="file" id="room_image" name="room_image" accept="image/*"></td>
+          </tr>
+      </table>
+  
+      <button type="submit">Add Room</button>
+  </form>
+  <script>
+    $(document).ready(function() {
+        // Define the price and maximum persons for each room type
+        const roomDetails = {
+            'Single': { price: 500, maxPersons: 2 },
+            'Double': { price: 1200, maxPersons: 3 },
+            'Suite': { price: 2000, maxPersons: 7 }
+            // Add more room types and their details as needed
+        };
+
+        // Event listener for room_type dropdown change
+        $('#room_type').change(function() {
+            // Get the selected room type
+            const selectedRoomType = $(this).val();
+
+            // Get the details for the selected room type
+            const roomDetail = roomDetails[selectedRoomType] || { price: 0, maxPersons: 1 };
+
+            // Update the price field
+            $('#price').val(roomDetail.price);
+
+            // Update the max_persons field
+            $('#max_persons').val(roomDetail.maxPersons);
+        });
+    });
+</script>
+
+    <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+    crossorigin="anonymous"
+  ></script>
+</body>
+</html>

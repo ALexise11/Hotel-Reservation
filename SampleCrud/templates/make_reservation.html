@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+
+<body>
+
+<div class="container">
+    <h1>Make Reservation</h1>
+
+    {% if selected_room %}
+        <div class="card mb-4">
+            <img src="{{ url_for('static', filename='images/room1.jpg') }}" class="card-img-top fit-image"
+                alt="Room {{ selected_room.room_number }}" height="350">
+            <div class="card-body">
+                <h5 class="card-title">Room Number: {{ selected_room.room_number }}</h5>
+                <p class="card-text">Room Name: {{ selected_room.room_name }}</p>
+                <p class="card-text">Room Type: {{ selected_room.room_type }}</p>
+                <p class="card-text">Price: ₱{{ selected_room.price }}</p>
+                <p class="card-text">Availability: {% if selected_room.is_available == 1 %} Reserve Now! {% else %} Not
+                    Occupied {% endif %}</p>
+
+                <!-- Form for making reservation -->
+                <form method="POST" action="{{ url_for('make_reservation') }}">
+                    <label for="check_in_date">Check-in Date:</label>
+                    <input type="date" id="check_in_date" name="check_in_date" required>
+                    
+                    <label for="check_out_date">Check-out Date:</label>
+                    <input type="date" id="check_out_date" name="check_out_date" required>
+
+
+                    <!-- Check-in time input -->
+                    <label for="check_in_time">Check-in Time:</label>
+                    <input type="time" id="check_in_time" name="check_in_time" required>
+
+                    <!-- Check-out date input -->
+                   
+                    <!-- Check-out time input -->
+                    <label for="check_out_time">Check-out Time:</label>
+                    <input type="time" id="check_out_time" name="check_out_time" required>
+
+                    <input type="hidden" name="room_number" value="{{ selected_room.room_number }}">    
+
+                   <div class="card mb-4">
+                    <div class="form-group">
+                        <label for="payment-method">Select Payment Method:</label>
+                        <select class="form-control" id="payment-method" name="payment-method" required>
+                            <option value="credit_card">Credit Card</option>
+                            <option value="debit_card">Debit Card</option>
+                            <option value="gcash">GCash</option>
+                            <!-- Add more options as needed -->
+                        </select>
+                    </div>
+                    
+                    <div id="gcash-details" style="display: none;">
+                        <div class="form-group">
+                            <label for="gcash-number">GCash Number:</label>
+                            <input type="text" class="form-control" id="gcash-number" placeholder="Enter GCash number" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="gcash-qr-code">GCash QR Code:</label>
+                            <img id="gcash-qr-code" src="../static/images/gcash.jpg" alt="GCash QR Code" style="max-width: 100%;">
+                        </div>
+                    </div>
+                    
+                    <!-- Card Holder Name -->
+                    <div class="form-group">
+                        <label for="card-holder-name">Card Holder Name:</label>
+                        <input type="text" class="form-control" id="card-holder-name" required>
+                    </div>
+                    
+                    <!-- Credit Card Details (Rendered based on Payment Method) -->
+                    <div id="credit-card-details">
+                        <div class="form-group">
+                            <label for="card-element">Card Details:</label>
+                            <div id="card-element" class="form-control"></div>
+                        </div>
+                    
+                        <!-- Card Errors Display -->
+                        <div id="card-errors" role="alert" class="alert alert-danger"></div>
+                    </div>
+                    
+                    <!-- Debit Card Details (Rendered based on Payment Method) -->
+                    <div id="debit-card-details" style="display: none;">
+                        <div class="form-group">
+                            <label for="debit-card-number">Debit Card Number:</label>
+                            <input type="text" class="form-control" id="debit-card-number" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="debit-card-expiration">Expiration Date:</label>
+                            <input type="text" class="form-control" id="debit-card-expiration" placeholder="MM / YYYY" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="debit-card-cvc">CVC:</label>
+                            <input type="text" class="form-control" id="debit-card-cvc" required>
+                        </div>
+                    
+                        <!-- Debit Card Errors Display -->
+                        <div id="debit-card-errors" role="alert" class="alert alert-danger"></div>
+                    </div>
+                    
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn btn-success" id="submit-button">Reserve Room & Pay</button>
+                    </div>
+                </form>
+                <!-- Back button to go back to the home page -->
+                <a href="{{ url_for('home') }}" class="btn btn-secondary">Back</a>
+            </div>
+        </div>
+    {% else %}
+        <a href="{{ url_for('home') }}" class="btn btn-secondary">Back to Home</a>
+        {% if rooms %}
+            <div class="row">
+                {% for room in rooms %}
+                    <div class="col-md-4">
+                        <div class="card mb-4">
+                            <img src="{{ url_for('static', filename='images/room1.jpg') }}"
+                                class="card-img-top fit-image" alt="Room {{ room.room_number }}">
+                            <div class="card-body">
+                                <p class="card-text">Room Number: {{ room.room_number }}</p>
+                                <p class="card-text">Room Name: {{ room.room_name }}</p>
+                                <p class="card-text">Room Type: {{ room.room_type }}</p>
+                                <p class="card-text">Price: ₱{{ room.price }}</p>
+                                <p class="card-text">Availability: {% if room.is_available == 1 %} Reserve Now {% else %}
+                                    Occupied {% endif %}</p>
+
+                                <!-- Form for making reservation -->
+                                <form method="POST" action="{{ url_for('make_reservation') }}">
+                                    <input type="hidden" name="room_number" value="{{ room.room_number }}">
+                                    <button type="submit" class="btn btn-success">Reserve this Room</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <!-- <p>No rooms available.</p> -->
+        {% endif %}
+    {% endif %}
+
+    {% if reservation_success %}
+        <div class="alert alert-success mt-3" role="alert">
+            {{ reservation_success }}
+        </div>
+    {% endif %}
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="alert alert-danger mt-3" role="alert">
+          {{ messages[0] }}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+</div>
+
+<!-- Include Bootstrap JS and Popper.js -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<!-- JavaScript to prevent past dates for check-in and check-out -->
+<script>
+   
+    // Get today's date
+    var today = new Date().toISOString().split('T')[0];
+
+    // Set the min attribute of the check-in and check-out date inputs
+    document.getElementById('check_in_date').setAttribute('min', today);
+    document.getElementById('check_out_date').setAttribute('min', today);
+
+    // Add event listeners to check for changes in check-in and check-out dates
+    document.getElementById('check_in_date').addEventListener('change', updateCheckOutMin);
+    document.getElementById('check_out_date').addEventListener('change', updateCheckInMax);
+
+    // Function to update the min attribute of check-out based on check-in date
+    function updateCheckOutMin() {
+        var checkInDate = document.getElementById('check_in_date').value;
+        document.getElementById('check_out_date').setAttribute('min', checkInDate);
+    }
+
+    // Function to update the max attribute of check-in based on check-out date
+    function updateCheckInMax() {
+        var checkOutDate = document.getElementById('check_out_date').value;
+        document.getElementById('check_in_date').setAttribute('max', checkOutDate);
+    }
+
+    // Add event listener to check for changes in check-in and check-out times
+    document.getElementById('check_in_time').addEventListener('change', validateCheckOutTime);
+    document.getElementById('check_out_time').addEventListener('change', validateCheckOutTime);
+
+    // Function to validate check-out time is not before check-in time
+    function validateCheckOutTime() {
+        var checkInDateTime = new Date(document.getElementById('check_in_date').value + ' ' + document.getElementById('check_in_time').value);
+        var checkOutDateTime = new Date(document.getElementById('check_out_date').value + ' ' + document.getElementById('check_out_time').value);
+
+        if (checkOutDateTime <= checkInDateTime) {
+            alert('Check-out time must be after check-in time.');
+            document.getElementById('check_out_time').value = '';
+        }
+    }
+    document.getElementById('payment-method').addEventListener('change', function () {
+        var selectedMethod = this.value;
+        var creditCardDetails = document.getElementById('credit-card-details');
+        var debitCardDetails = document.getElementById('debit-card-details');
+        var gcashDetails = document.getElementById('gcash-details');
+
+        // Toggle the display based on the selected method
+        if (selectedMethod === 'credit_card') {
+            creditCardDetails.style.display = 'block';
+            debitCardDetails.style.display = 'none';
+            gcashDetails.style.display = 'none';
+        } else if (selectedMethod === 'debit_card') {
+            creditCardDetails.style.display = 'none';
+            debitCardDetails.style.display = 'block';
+            gcashDetails.style.display = 'none';
+        } else if (selectedMethod === 'gcash') {
+            creditCardDetails.style.display = 'none';
+            debitCardDetails.style.display = 'none';
+            gcashDetails.style.display = 'block';
+        }
+        // Add more conditions for other payment methods if needed
+    });
+
+    // Add logic to generate QR code or display GCash number (replace placeholder code)
+    document.getElementById('submit-button').addEventListener('click', function () {
+        var selectedMethod = document.getElementById('payment-method').value;
+        if (selectedMethod === 'gcash') {
+            // Replace the placeholder code with logic to generate QR code or display GCash number
+            var gcashNumber = document.getElementById('gcash-number').value;
+            var qrCodeElement = document.getElementById('gcash-qr-code');
+            // Example: Use a QR code generation library or API to generate the QR code
+            // For simplicity, we'll just display a placeholder image here
+            qrCodeElement.src = 'https://via.placeholder.com/200x200?text=GCash+QR+Code';
+        }
+    });
+
+    // Set the default GCash number using jQuery
+    $(document).ready(function () {
+        $('#gcash-number').val('09198811589');
+    });
+</script>
+
+
+</body>
+
+</html>

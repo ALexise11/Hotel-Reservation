@@ -1,0 +1,95 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+
+<head>
+   
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+
+<body>
+
+<div class="header">
+    <h1>Grand Residency Hotel</h1>
+    <div class="button-row">
+        <a href="/person" class="btn btn-primary">User's Info</a>
+        <a href="/about" class="btn btn-info">About</a>
+        <a href="/info" class="btn btn-warning">Info</a>
+        <a href="/logout" class="btn btn-danger">Logout</a>
+    </div>
+</div>
+
+<div class="container">
+    <h1>Room Reservation</h1>
+
+    <h2>Room Details</h2>
+    <div class="card">
+        <div class="card-body">
+            <h2 class="card-title">Room Number: {{ room.room_number }}</h2>
+            <h2 class="card-title">Room Name: {{ room.room_name }}</h2>
+            <p class="card-text">Room Type: {{ room.room_type }}</p>
+            <p class="card-text">Price: ₱{{ room.price }}</p>
+        </div>
+    </div>
+
+    <h2>Reservation Dates</h2>
+    <ul>
+        {% for reservation in reservations %}
+            <li>
+                Check-In: {{ reservation.check_in }}, Check-Out: {{ reservation.check_out }}
+                {% if reservation.is_confirmed == 1 %}
+                    <span class="text-success">(Confirmed)</span>
+                {% else %}
+                    <span class="text-danger">(Not Confirmed)</span>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+
+</html> -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reservations</title>
+</head>
+<body>
+    <h1>Reservations</h1>
+    <table border="1">
+        <!-- Table Header -->
+        <thead>
+            <tr>
+                <th>Reservation ID</th>
+                <th>Room Number</th>
+                <th>Check-in Date</th>
+                <th>Check-out Date</th>
+                <th>Guest ID</th>
+            </tr>
+        </thead>
+        <!-- Table Body -->
+        <tbody>
+            {% for reservation in reservations %}
+                <tr>
+                    <td>{{ reservation[0] }}</td>
+                    <td>{{ reservation[1] }}</td>
+                    <td>{{ reservation[2] }}</td>
+                    <td>{{ reservation[3] }}</td>
+                    <td>{{ reservation[4] }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <!-- Back Button -->
+    <br>
+    <a href="{{ url_for('make_reservation') }}">Back</a>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grand Residency Hotel</title>
+    <!-- Include any additional styles or scripts if needed -->
+</head>
+
+<body>
+    <h1>Confirm Reservation</h1>
+    <form action="{{ url_for('save_reservation') }}" method="post">
+        <div>
+            <label for="room_number">Room Number</label>
+            <input type="text" id="room_number" name="room_number" value="{{ reservation_data.room_number }}" readonly>
+        </div>
+        <div>
+            <label for="check_in_date">Check-in Date</label>
+            <input type="text" id="check_in_date" name="check_in_date" value="{{ reservation_data.check_in_date }}" readonly>
+        </div>
+        <div>
+            <label for="check_in_time">Check-in Time</label>
+            <input type="text" id="check_in_time" name="check_in_time" value="{{ reservation_data.check_in_time }}" readonly>
+        </div>
+        <div>
+            <label for="check_out_date">Check-out Date</label>
+            <input type="text" id="check_out_date" name="check_out_date" value="{{ reservation_data.check_out_date }}" readonly>
+        </div>
+        <div>
+            <label for="check_out_time">Check-out Time</label>
+            <input type="text" id="check_out_time" name="check_out_time" value="{{ reservation_data.check_out_time }}" readonly>
+        </div>
+
+        <input type="submit" value="Confirm Reservation">
+        <a href="{{ url_for('make_reservation') }}">Cancel</a>
+    </form>
+</body>
+
+</html>
